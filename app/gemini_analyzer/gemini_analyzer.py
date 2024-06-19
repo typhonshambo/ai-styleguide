@@ -1,7 +1,7 @@
 import google.generativeai as genai
-import os
+import streamlit as st
 
-genai.configure(api_key=os.environ["GENAI_API_KEY"])
+genai.configure(api_key=st.secrets["GENAI_API_KEY"])
 
 def analyze_code(code, language="python"):
     prompt = f"""Analyze the following Python code according to PEP 8 style guidelines:
