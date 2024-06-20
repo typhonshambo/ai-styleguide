@@ -1,4 +1,5 @@
-from .gemini_analyzer import analyze_code
+from .gemini_analyzer import AnalyzerConfigs, CodeAnalyzer
 __all__ = [
-    'analyze_code'
+    'AnalyzerConfigs',
+    'CodeAnalyzer'
 ]

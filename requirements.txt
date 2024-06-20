@@ -1,2 +1,6 @@
 streamlit==1.35.0
 google-generativeai
+python-dotenv==1.0.1
+structlog==24.2.0
+rich==13.7.1
+watchdog==4.0.1
