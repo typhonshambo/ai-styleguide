@@ -57,10 +57,10 @@ npm run compile
 *   **Streamlit Frontend:**  Creates a user-friendly interface with Streamlit where users can input code, view and customize their style guide, and receive real-time feedback.
 
 
-## Team and Expertise
+## Team 
 
-*   **Shambo Chowdhury:** Experienced data scientist proficient in Python, C, SQL, and data science tools.
-*   **Additional Team Members (Optional):** Consider collaborating with a front-end developer or UI/UX designer for a more polished product.
+*   **Shambo Chowdhury:** Experienced in Python, C, SQL, and data science tools.
+
 
 ## Potential Impact
 
