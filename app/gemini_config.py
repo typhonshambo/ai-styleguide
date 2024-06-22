@@ -1,6 +1,5 @@
 import os
 import streamlit as st
-
 class AnalyzerConfigs:
     '''
     This class contains configuration settings for the CodeAnalyzer class.

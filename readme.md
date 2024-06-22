@@ -16,6 +16,28 @@ Our solution is an AI-powered tool that:
 2.  **Generates** a personalized style guide that aligns with the developer's style while adhering to common best practices.
 3.  **Provides** real-time feedback and suggestions in the code editor to help developers maintain consistent code style.
 
+## Demo
+<video controls>
+    <source src="assets/beta_demo_video.mov" type="video/mp4">
+    Your browser does not support the video tag. ![click here](assets/beta_demo_video.mov)
+</video>
+
+[![Streamlit App](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://ai-styleguide.streamlit.app)
+
+## Setup
+ > For VS-code extension
+1. Running the backend
+```bash
+pip3 install -r requirements.txt
+python3 server.py
+```
+2. Running the extension locally
+```bash
+npm install
+npm run compile
+```
+3. Run debugger to get a vs-code workspace installed with the extension to test out 
+
 ## Key Features
 
 *   **Personalized Style Guide Generation:**  Analyzes code to identify common patterns and preferences, and generates a customized style guide.
@@ -31,13 +53,6 @@ Our solution is an AI-powered tool that:
 *   **Flask Backend:**  Builds a robust backend with Flask to handle API requests, process data, and interact with Gemini.
 *   **Streamlit Frontend:**  Creates a user-friendly interface with Streamlit where users can input code, view and customize their style guide, and receive real-time feedback.
 
-## Project Timeline (Estimate for Gemini API Competition)
-
-*   Week 1-2: Project definition, research, and dataset collection
-*   Week 3-5: Model development and training
-*   Week 6-7: Backend and API development
-*   Week 8-9: Frontend development
-*   Week 10: Testing and deployment
 
 ## Team and Expertise
 
@@ -53,14 +68,13 @@ This project has the potential to significantly improve code quality, maintainab
 *   More efficient code reviews
 *   Overall increased productivity
 
-## Next Steps
+## Contribution
 
-1.  Refine the project scope and features.
-2.  Finalize the technical approach and choose specific tools and libraries.
-3.  Begin collecting and preprocessing the code dataset.
-4.  Develop the machine learning models and integrate with Gemini API.
-5.  Build the backend API and Streamlit frontend.
-6.  Conduct thorough testing and deploy the application.
+We welcome contributions from the community! If you're interested in contributing to our project, please check out our [GitHub repository](https://github.com/your-repo) for open issues. Feel free to assign yourself to any issue that you'd like to work on. We appreciate your help in making our project even better!
+
+## Contact
+For questions or collaboration opportunities, please contact Shambo Chowdhury.
+
 
 ## Contact
 

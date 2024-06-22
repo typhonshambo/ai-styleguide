@@ -1,5 +1,4 @@
 import google.generativeai as genai
-from .config import AnalyzerConfigs
 from typing import Optional, Union
 import structlog
 structlog.stdlib.recreate_defaults()
@@ -8,6 +7,8 @@ log = structlog.get_logger(__name__).info(f"module loaded successfully.")
 
 class CodeAnalyzer:
   def __init__(self) -> None:
+      from .gemini_config import AnalyzerConfigs #prevent circular import
+
       self.language: str[Optional] = "python"
       self.style_guide: str[Optional] = "google official"
       self.gemini_model = genai.GenerativeModel(AnalyzerConfigs.gemini_models[0])
@@ -24,16 +25,30 @@ class CodeAnalyzer:
       try:
         prompt = f"""Analyze the following {self.language} code according to {self.style_guide} style guidelines:
 
-        ```{self.language}
-        {self._input_code}
-        ```
+          ```{self.language}
+          {self._input_code}
+          ```
 
-        Please provide a detailed analysis, including:
+          Please provide a detailed analysis, including:
 
-        1. Specific violations with line numbers.
-        2. Suggestions for how to fix each violation, ideally with code examples.
-        3. Prioritize the most critical issues for readability and maintainability.
-        """
+          1. Specific violations with line numbers.
+          2. Suggestions for how to fix each violation, ideally with code examples.
+          3. Prioritize Only the most critical issues for readability and maintainability.
+
+          Just Provide the output in this format and nothing extra dont use ```json ``` also in your text:
+          {{
+            "issues": [
+              {{
+                "line": 10,
+                "message": "Variable name should be in snake_case. Fix: variable_name"
+              }},
+              {{
+                "line": 20,
+                "message": "Function name should be in snake_case. Fix: function_name"
+              }}
+            ]
+          }}
+          """
 
         model = self.gemini_model
         response = model.generate_content(prompt)
@@ -43,6 +58,7 @@ class CodeAnalyzer:
 
         style_guide = response.text  # Adjust this based on the actual response structure
         self._logger.info("Style guide generated successfully.")
+        self._logger.info(style_guide)
         return style_guide
       
       except Exception as e:

@@ -1,6 +1,6 @@
 
 import streamlit as st
-from app.gemini_analyzer import CodeAnalyzer
+from app import CodeAnalyzer
 
 code_handler = CodeAnalyzer()
 
