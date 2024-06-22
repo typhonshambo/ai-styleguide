@@ -1,3 +1,5 @@
+<img src='https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlebard&logoColor=fff'>
+
 # AI-Powered Personalized Code Style Guide
 
 ## Project Overview
