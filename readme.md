@@ -17,12 +17,12 @@ Our solution is an AI-powered tool that:
 3.  **Provides** real-time feedback and suggestions in the code editor to help developers maintain consistent code style.
 
 ## Demo
-<video controls>
-    <source src="assets/beta_demo_video.mov" type="video/mp4">
-    Your browser does not support the video tag. ![click here](assets/beta_demo_video.mov)
-</video>
-
+https://github.com/typhonshambo/ai-styleguide/assets/54593764/852f3357-a0b4-4313-9096-6d4ea19b2394
 [![Streamlit App](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://ai-styleguide.streamlit.app)
+
+
+
+
 
 ## Setup
  > For VS-code extension
