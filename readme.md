@@ -78,8 +78,3 @@ We welcome contributions from the community! If you're interested in contributin
 ## Contact
 For questions or collaboration opportunities, please contact Shambo Chowdhury.
 
-
-## Contact
-
-For questions or collaboration opportunities, please contact Shambo Chowdhury.
-
