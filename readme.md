@@ -24,9 +24,6 @@ https://github.com/typhonshambo/ai-styleguide/assets/54593764/852f3357-a0b4-4313
 [![Streamlit App](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://ai-styleguide.streamlit.app)
 
 
-
-
-
 ## Setup
  > For VS-code extension
 1. Running the backend

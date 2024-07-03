@@ -8,16 +8,27 @@
         "vscode": "^1.75.0"
     },
     "categories": ["Linters"], 
-    "activationEvents": ["onLanguage:*"], 
+    "activationEvents": ["onStartupFinished"],
     "main": "./out/extension.js", 
     "keywords": ["style guide", "linter", "code quality"], 
     "contributes": {
         "commands": [
             {
-                "command": "extension.analyzeCode",  
-                "title": "Analyze Code"             
+                "command": "extension.analyzeCode",
+                "title": "Analyze Code"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "AI Style Guide Configuration",
+            "properties": {
+                "extension.serverUrl": {
+                    "type": "string",
+                    "default": "http://127.0.0.1:5000",
+                    "description": "The URL of the AI style guide server."
+                }
+            }
+        }
     },
     "scripts": {
         "compile": "tsc -p ./",
@@ -33,6 +44,6 @@
         "vscode-test": "^1.6.0"
     },
     "dependencies": {
-        "axios": "^0.27.2"
+        "axios": "^0.27.2" 
     }
 }
