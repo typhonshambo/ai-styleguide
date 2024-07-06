@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-from typing import TypedDict
+from typing_extensions import TypedDict
 class AnalyzerConfigs:
     '''
     This class contains configuration settings for the CodeAnalyzer class.
