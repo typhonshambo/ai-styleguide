@@ -7,6 +7,7 @@ interface Issue {
 }
 
 let analyzedDocuments: Map<string, Issue[]> = new Map();
+let diagnosticCollection: vscode.DiagnosticCollection;
 
 // Command to analyze code
 const analyzeCommand = vscode.commands.registerCommand('extension.analyzeCode', async () => {
@@ -31,15 +32,12 @@ const analyzeCommand = vscode.commands.registerCommand('extension.analyzeCode', 
 
       if (styleGuide && Array.isArray(styleGuide.issues)) {
         vscode.window.showInformationMessage('Code analysis complete!');
-        
+
         // Store issues for the current document
         analyzedDocuments.set(document.uri.toString(), styleGuide.issues);
         
-        // Manually trigger CodeLens refresh
-        vscode.languages.registerCodeLensProvider({ scheme: 'file', language: document.languageId }, new CodeAnalyzerCodeLensProvider(document.uri));
-        
-        // Refresh CodeLenses
-        vscode.commands.executeCommand('vscode.executeCodeLensProvider', document.uri);
+        // Update diagnostics
+        updateDiagnostics(document, styleGuide.issues);
       } else {
         vscode.window.showErrorMessage('Code analysis failed or returned unexpected results.');
       }
@@ -55,9 +53,24 @@ const analyzeCommand = vscode.commands.registerCommand('extension.analyzeCode', 
   }
 });
 
+function updateDiagnostics(document: vscode.TextDocument, issues: Issue[]) {
+  const diagnostics: vscode.Diagnostic[] = issues.map(issue => {
+    const line = issue.line - 1;
+    const range = new vscode.Range(line, 0, line, document.lineAt(line).range.end.character);
+    const diagnostic = new vscode.Diagnostic(range, issue.message, vscode.DiagnosticSeverity.Warning);
+    diagnostic.source = 'Code Analyzer';
+    return diagnostic;
+  });
+
+  diagnosticCollection.set(document.uri, diagnostics);
+}
+
 export function activate(context: vscode.ExtensionContext) {
   const outputChannel = vscode.window.createOutputChannel("Code Analyzer");
   context.subscriptions.push(outputChannel);
+
+  diagnosticCollection = vscode.languages.createDiagnosticCollection('codeAnalyzer');
+  context.subscriptions.push(diagnosticCollection);
 
   context.subscriptions.push(analyzeCommand);
 
@@ -66,52 +79,11 @@ export function activate(context: vscode.ExtensionContext) {
   statusBarButton.command = "extension.analyzeCode";
   statusBarButton.show();
   context.subscriptions.push(statusBarButton);
-
-  vscode.commands.registerCommand('extension.showIssueDetails', (issue) => {
-    outputChannel.clear();
-    outputChannel.appendLine("Issue Details:");
-    outputChannel.appendLine(`Line ${issue.line}: ${issue.message}`);
-    outputChannel.show();
-  });
-
-  vscode.workspace.onDidOpenTextDocument((document) => {
-    // Clear CodeLenses for other documents
-    if (!analyzedDocuments.has(document.uri.toString())) {
-      vscode.commands.executeCommand('vscode.executeCodeLensProvider', document.uri);
-    }
-  });
-}
-
-class CodeAnalyzerCodeLensProvider implements vscode.CodeLensProvider {
-  private documentUri: vscode.Uri;
-
-  constructor(documentUri: vscode.Uri) {
-    this.documentUri = documentUri;
-  }
-
-  async provideCodeLenses(document: vscode.TextDocument): Promise<vscode.CodeLens[]> {
-    if (document.uri.toString() !== this.documentUri.toString()) {
-      return [];
-    }
-
-    const issues = analyzedDocuments.get(document.uri.toString());
-    if (!issues) {
-      return [];
-    }
-
-    return issues.map((issue: Issue) => {
-      const line = issue.line - 1;
-      const range = new vscode.Range(line, 0, line, 0);
-
-      return new vscode.CodeLens(range, {
-        title: issue.message,
-        command: 'extension.showIssueDetails',
-        arguments: [issue]
-      });
-    });
-  }
 }
 
 export function deactivate() {
   analyzedDocuments.clear();
+  if (diagnosticCollection) {
+    diagnosticCollection.dispose();
+  }
 }
