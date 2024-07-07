@@ -15,8 +15,8 @@ class CodeAnalyzer:
             ResponseData,
         )  # prevent circular import
 
-        self.language: Optional[str] = "python"
-        self.style_guide: Optional[str] = "google official"
+        self.language: str[Optional] = "python"
+        self.style_guide: str[Optional] = "google official"
         self.gemini_model = genai.GenerativeModel(
             AnalyzerConfigs.gemini_models[1],
             generation_config={
@@ -35,8 +35,7 @@ class CodeAnalyzer:
         This method analyzes the input code and generates a style guide using the Gemini model.
         """
         try:
-            prompt = f"""
-        Analyze the following {self.language} code according to {self.style_guide} style guidelines:
+            prompt = f"""Analyze the following {self.language} code according to {self.style_guide} style guidelines:
 
           ```{self.language}
 

@@ -4,10 +4,11 @@ import json
 
 app = Flask(__name__)
 
-@app.route('/analyze', methods=['POST'])
+
+@app.route("/analyze", methods=["POST"])
 def analyze():
     data = request.get_json()
-    code = data['code']
+    code = data["code"]
 
     analyzer = CodeAnalyzer()
     analyzer._input_code = code
@@ -17,7 +18,7 @@ def analyze():
     if style_guide:
         return jsonify({'style_guide': issues}), 200
     else:
-        return jsonify({'error': 'Analysis failed'}), 500
+        return jsonify({"error": "Analysis failed"}), 500
 
 
 if __name__ == '__main__':

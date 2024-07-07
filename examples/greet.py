@@ -1,6 +1,7 @@
 def greet(name):
-  """Greets the person with the given name."""
+    """Greets the person with the given name."""
 
-  print("Hello,", name)
+    print("Hello,", name)
+
 
 greet("Alice")
