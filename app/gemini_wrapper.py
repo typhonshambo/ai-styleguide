@@ -12,5 +12,6 @@ def main():
     else:
         print(json.dumps({'error': 'Analysis failed'}))
 
+
 if __name__ == '__main__':
     main()
