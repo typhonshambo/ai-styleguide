@@ -1,0 +1,45 @@
+name: Lint and Streamlit Check
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  run-linters:
+    name: Run Linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'  
+
+      - name: Install Python dependencies
+        run: |
+          pip install black flake8 streamlit
+          # Install TypeScript dependencies (if needed)
+          npm install -g typescript eslint
+
+      - name: Run Python linters
+        uses: wearerequired/lint-action@v2
+        with:
+          auto_fix: true
+          black: true
+          flake8: true
+
+      - name: Run TypeScript linter
+        if: hashFiles('**/*.ts') != '' 
+        run: npx eslint . 
+
+      - name: Streamlit Check
+        run: |
+          streamlit run streamlit.py  
+         
