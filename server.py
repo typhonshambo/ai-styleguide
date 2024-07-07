@@ -14,12 +14,12 @@ def analyze():
     analyzer._input_code = code
     style_guide = analyzer.analyze_code()
     processed_stule_guide = json.loads(style_guide)
-    issues = {'issues': processed_stule_guide}
+    issues = {"issues": processed_stule_guide}
     if style_guide:
-        return jsonify({'style_guide': issues}), 200
+        return jsonify({"style_guide": issues}), 200
     else:
         return jsonify({"error": "Analysis failed"}), 500
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(port=5000)
