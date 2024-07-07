@@ -18,7 +18,7 @@ if st.button("Analyze"):
             # Expanders
             for items in data["issues"]:
                 with st.expander(f"Line `{items['line']}`"):
-                    st.write(items['message'])
+                    st.write(items["message"])
             # JSON output
             st.subheader("Raw API response : ")
             with st.expander("Expand"):
