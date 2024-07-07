@@ -5,3 +5,5 @@ structlog==24.2.0
 rich==13.7.1
 watchdog==4.0.1
 flask==3.0.3
+flake8==7.1.0
+black==24.4.2
