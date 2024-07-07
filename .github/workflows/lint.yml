@@ -25,19 +25,13 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install black flake8 streamlit
-          # Install TypeScript dependencies (if needed)
-          npm install -g typescript eslint
-
+          
       - name: Run Python linters
         uses: wearerequired/lint-action@v2
         with:
           auto_fix: true
           black: true
           flake8: true
-
-      - name: Run TypeScript linter
-        if: hashFiles('**/*.ts') != '' 
-        run: npx eslint . 
 
       - name: Streamlit Check
         run: |
