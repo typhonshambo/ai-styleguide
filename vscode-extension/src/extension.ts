@@ -4,10 +4,29 @@ import axios from 'axios';
 interface Issue {
   line: number;
   message: string;
+  start_char: number;
+  end_char: number;
+  severity: string;
 }
 
 let analyzedDocuments: Map<string, Issue[]> = new Map();
-let diagnosticCollection: vscode.DiagnosticCollection;
+const diagnosticCollection = vscode.languages.createDiagnosticCollection('codeAnalyzer');
+
+// Convert severity from string to DiagnosticSeverity
+function getSeverity(severity: string): vscode.DiagnosticSeverity {
+  switch (severity.toUpperCase()) {
+    case 'ERROR':
+      return vscode.DiagnosticSeverity.Error;
+    case 'WARNING':
+      return vscode.DiagnosticSeverity.Warning;
+    case 'INFORMATION':
+      return vscode.DiagnosticSeverity.Information;
+    case 'HINT':
+      return vscode.DiagnosticSeverity.Hint;
+    default:
+      return vscode.DiagnosticSeverity.Information;
+  }
+}
 
 // Command to analyze code
 const analyzeCommand = vscode.commands.registerCommand('extension.analyzeCode', async () => {
@@ -32,12 +51,13 @@ const analyzeCommand = vscode.commands.registerCommand('extension.analyzeCode', 
 
       if (styleGuide && Array.isArray(styleGuide.issues)) {
         vscode.window.showInformationMessage('Code analysis complete!');
-
+        
         // Store issues for the current document
         analyzedDocuments.set(document.uri.toString(), styleGuide.issues);
         
         // Update diagnostics
         updateDiagnostics(document, styleGuide.issues);
+        
       } else {
         vscode.window.showErrorMessage('Code analysis failed or returned unexpected results.');
       }
@@ -55,9 +75,8 @@ const analyzeCommand = vscode.commands.registerCommand('extension.analyzeCode', 
 
 function updateDiagnostics(document: vscode.TextDocument, issues: Issue[]) {
   const diagnostics: vscode.Diagnostic[] = issues.map(issue => {
-    const line = issue.line - 1;
-    const range = new vscode.Range(line, 0, line, document.lineAt(line).range.end.character);
-    const diagnostic = new vscode.Diagnostic(range, issue.message, vscode.DiagnosticSeverity.Warning);
+    const range = new vscode.Range(new vscode.Position(issue.line - 1, issue.start_char), new vscode.Position(issue.line - 1, issue.end_char));
+    const diagnostic = new vscode.Diagnostic(range, issue.message, getSeverity(issue.severity));
     diagnostic.source = 'Code Analyzer';
     return diagnostic;
   });
@@ -69,9 +88,6 @@ export function activate(context: vscode.ExtensionContext) {
   const outputChannel = vscode.window.createOutputChannel("Code Analyzer");
   context.subscriptions.push(outputChannel);
 
-  diagnosticCollection = vscode.languages.createDiagnosticCollection('codeAnalyzer');
-  context.subscriptions.push(diagnosticCollection);
-
   context.subscriptions.push(analyzeCommand);
 
   const statusBarButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
@@ -79,11 +95,25 @@ export function activate(context: vscode.ExtensionContext) {
   statusBarButton.command = "extension.analyzeCode";
   statusBarButton.show();
   context.subscriptions.push(statusBarButton);
+
+  context.subscriptions.push(diagnosticCollection);
+
+  vscode.commands.registerCommand('extension.showIssueDetails', (issue) => {
+    outputChannel.clear();
+    outputChannel.appendLine("Issue Details:");
+    outputChannel.appendLine(`Line ${issue.line}: ${issue.message}`);
+    outputChannel.show();
+  });
+
+  vscode.workspace.onDidOpenTextDocument((document) => {
+    // Clear diagnostics for other documents
+    if (!analyzedDocuments.has(document.uri.toString())) {
+      diagnosticCollection.delete(document.uri);
+    }
+  });
 }
 
 export function deactivate() {
   analyzedDocuments.clear();
-  if (diagnosticCollection) {
-    diagnosticCollection.dispose();
-  }
+  diagnosticCollection.clear();
 }
