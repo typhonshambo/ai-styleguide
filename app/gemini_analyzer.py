@@ -1,27 +1,23 @@
 import google.generativeai as genai
 from typing import Optional, Union
-
+from .gemini_config import AnalyzerConfigs
 # for logging
 import structlog
 
 structlog.stdlib.recreate_defaults()
 log = structlog.get_logger(__name__).info("module loaded successfully.")
 
+__all__ = ["CodeAnalyzer"]
 
 class CodeAnalyzer:
     def __init__(self) -> None:
-        from .gemini_config import (
-            AnalyzerConfigs,
-            ResponseData,
-        )  # prevent circular import
-
         self.language: str[Optional] = "python"
         self.style_guide: str[Optional] = "google official"
         self.gemini_model = genai.GenerativeModel(
-            AnalyzerConfigs.gemini_models[1],
+            AnalyzerConfigs.gemini_models[0],
             generation_config={
                 "response_mime_type": "application/json",
-                "response_schema": list[ResponseData],
+                # "response_schema": list[ResponseData],
             },
         )
         self._gen_ai_config = genai.configure(api_key=AnalyzerConfigs.genai_api_key)
@@ -35,19 +31,24 @@ class CodeAnalyzer:
         This method analyzes the input code and generates a style guide using the Gemini model.
         """
         try:
-            prompt = f"""Analyze the following {self.language} code according to {self.style_guide} style guidelines:
+            prompt = f'''Analyze the following {self.language} code according to {self.style_guide} style guidelines:
 
-          ```{self.language}
+            ```{self.language}
 
-          {self._input_code}
-          ```
+            {self._input_code}
+            ```
 
-          Please provide a detailed analysis, including:
+            Please provide a detailed analysis, including:
 
-          1. Specific violations message with line numbers.
-          2. Suggestions for how to fix each violation, ideally with code examples.
-          3. Prioritize Only the most critical issues for readability and maintainability.
-        """
+            1. Specific violations message with line numbers.
+            2. Suggestions for how to fix each violation, ideally with code examples.
+            3. Prioritize Only the most critical issues for readability and maintainability.
+            4. Mention start_char as well as end_char for highlighting the issue in the code.
+
+            Using this JSON schema:
+            response = {{"line": int,"message": str,"severity": str, "start_char": int, "end_char": int}}
+            Return a `list[response]`
+        '''
 
             model = self.gemini_model
             response = model.generate_content(prompt)

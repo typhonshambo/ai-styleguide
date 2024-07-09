@@ -16,8 +16,8 @@ if st.button("Analyze"):
             data = json.loads(response)
             st.subheader("Style Guide and Suggestions:")
             # Expanders
-            for items in data["issues"]:
-                with st.expander(f"Line `{items['line']}`"):
+            for items in data:
+                with st.expander(f"Line `{items['line']}` | Severity: `{items['severity']}`"):
                     st.write(items["message"])
             # JSON output
             st.subheader("Raw API response : ")
