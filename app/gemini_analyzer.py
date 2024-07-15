@@ -1,7 +1,6 @@
 import google.generativeai as genai
-from typing import Optional, Union
+from typing import List
 from .gemini_config import AnalyzerConfigs
-# for logging
 import structlog
 
 structlog.stdlib.recreate_defaults()
@@ -11,32 +10,25 @@ __all__ = ["CodeAnalyzer"]
 
 class CodeAnalyzer:
     def __init__(self) -> None:
-        self.language: str[Optional] = "python"
-        self.style_guide: str[Optional] = "google official"
+        self.language: str = "python"
+        self.style_guide: str = "google official"
         self.gemini_model = genai.GenerativeModel(
-            AnalyzerConfigs.gemini_models[0],
+            AnalyzerConfigs.gemini_models[1],
             generation_config={
                 "response_mime_type": "application/json",
-                # "response_schema": list[ResponseData],
             },
         )
         self._gen_ai_config = genai.configure(api_key=AnalyzerConfigs.genai_api_key)
-        self._input_code: str = None
-        self._prompt: str = None
-        self._response: Union[list, None] = None
         self._logger = structlog.get_logger("CodeAnalyzer")
 
-    def analyze_code(self) -> Union[list, None]:
+    def analyze_code(self, lines: List[str]) -> str:
         """
-        This method analyzes the input code and generates a style guide using the Gemini model.
+        This method analyzes the input lines of code and generates a style guide using the Gemini model.
         """
         try:
-            prompt = f'''Analyze the following {self.language} code according to {self.style_guide} style guidelines:
+            prompt = f'''Analyze the following {self.language} code according to {self.style_guide} style guidelines, the array below contains line-wise code:
 
-            ```{self.language}
-
-            {self._input_code}
-            ```
+            {lines}
 
             Please provide a detailed analysis, including:
 
@@ -46,21 +38,19 @@ class CodeAnalyzer:
             4. Mention start_char as well as end_char for highlighting the issue in the code.
 
             Using this JSON schema:
-            response = {{"line": int,"message": str,"severity": str, "start_char": int, "end_char": int}}
+            response = {{"line": int, "message": str, "severity": str, "start_char": int, "end_char": int}}
             Return a `list[response]`
-        '''
+            '''
 
             model = self.gemini_model
             response = model.generate_content(prompt)
 
             # Extract and format the style guide from the response
-            # You will need to implement parsing logic here based on Gemini's response format
-
-            style_guide = (
-                response.text
-            )  # Adjust this based on the actual response structure
+            style_guide = response.text  # Adjust this based on the actual response structure
             self._logger.info("Style guide generated successfully.")
-            # self._logger.info(style_guide)
+            self._logger.debug(style_guide)
+            self._logger.debug(prompt)
+            self._logger.debug(response)
             return style_guide
 
         except Exception as e:

@@ -6,3 +6,5 @@ exclude =
     venv
     examples
 max-line-length = 120
+per-file-ignores =
+    gemini_analyzer.py: E501

@@ -1,49 +1,51 @@
 {
-    "name": "ai-styleguide",
-    "displayName": "AI Style Guide",
+    "name": "style-guide-ai",
+    "displayName": "Style Guide AI ",
     "description": "An AI-powered tool that crafts personalized code style guides and provides real-time feedback to ensure consistency and quality.",
     "version": "0.0.1",
     "publisher": "Shambo",
+    "icon": "assets/icon.png",
     "engines": {
-        "vscode": "^1.75.0"
+      "vscode": "^1.75.0"
     },
     "categories": ["Linters"], 
     "activationEvents": ["onStartupFinished"],
     "main": "./out/extension.js", 
     "keywords": ["style guide", "linter", "code quality"], 
     "contributes": {
-        "commands": [
-            {
-                "command": "extension.analyzeCode",
-                "title": "Analyze Code"
-            }
-        ],
-        "configuration": {
-            "type": "object",
-            "title": "AI Style Guide Configuration",
-            "properties": {
-                "extension.serverUrl": {
-                    "type": "string",
-                    "default": "http://127.0.0.1:5000",
-                    "description": "The URL of the AI style guide server."
-                }
-            }
+      "commands": [
+        {
+          "command": "extension.analyzeCode",
+          "title": "Analyze Code"
         }
+      ],
+      "configuration": {
+        "type": "object",
+        "title": "AI Style Guide Configuration",
+        "properties": {
+          "extension.serverUrl": {
+            "type": "string",
+            "default": "http://127.0.0.1:5000",
+            "description": "The URL of the AI style guide server."
+          }
+        }
+      }
     },
     "scripts": {
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "pretest": "npm run compile",
-        "test": "node ./out/test/runTest.js",
-        "vscode:prepublish": "npm run compile"
+      "compile": "tsc -p ./",
+      "watch": "tsc -watch -p ./",
+      "pretest": "npm run compile",
+      "test": "node ./out/test/runTest.js",
+      "vscode:prepublish": "npm run compile"
     },
     "devDependencies": {
-        "@types/node": "^18.0.0",
-        "@types/vscode": "^1.75.0",
-        "typescript": "^4.9.5",
-        "vscode-test": "^1.6.0"
+      "@types/node": "^18.0.0",
+      "@types/vscode": "^1.75.0",
+      "typescript": "^4.9.5",
+      "vscode-test": "^1.6.0"
     },
     "dependencies": {
-        "axios": "^0.27.2" 
+      "axios": "^0.27.2" 
     }
-}
+  }
+  
