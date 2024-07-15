@@ -4,6 +4,7 @@ import json
 
 app = FastAPI()
 
+
 @app.post("/analyze")
 async def analyze(request: Request):
     data = await request.json()
@@ -19,6 +20,8 @@ async def analyze(request: Request):
     else:
         return {"error": "Analysis failed"}, 400
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=5000)
