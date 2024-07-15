@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 class AnalyzerConfigs:
     """
     This class contains configuration settings for the CodeAnalyzer class.
@@ -25,5 +26,3 @@ class AnalyzerConfigs:
         "google style": "https://google.github.io/styleguide/pyguide.html",
         "pep8": "https://pep8.org/",
     }
-
-

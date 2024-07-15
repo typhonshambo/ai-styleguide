@@ -1,12 +1,14 @@
 import google.generativeai as genai
 from typing import List
 from .gemini_config import AnalyzerConfigs
+# for logging
 import structlog
 
 structlog.stdlib.recreate_defaults()
 log = structlog.get_logger(__name__).info("module loaded successfully.")
 
 __all__ = ["CodeAnalyzer"]
+
 
 class CodeAnalyzer:
     def __init__(self) -> None:
@@ -26,7 +28,7 @@ class CodeAnalyzer:
         This method analyzes the input lines of code and generates a style guide using the Gemini model.
         """
         try:
-            prompt = f'''Analyze the following {self.language} code according to {self.style_guide} style guidelines, the array below contains line-wise code:
+            prompt = f'''Analyze the following {self.language} code according to {self.style_guide} style guidelines:
 
             {lines}
 
@@ -40,7 +42,7 @@ class CodeAnalyzer:
             Using this JSON schema:
             response = {{"line": int, "message": str, "severity": str, "start_char": int, "end_char": int}}
             Return a `list[response]`
-            '''
+        '''
 
             model = self.gemini_model
             response = model.generate_content(prompt)

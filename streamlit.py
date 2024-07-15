@@ -17,7 +17,9 @@ if st.button("Analyze"):
             st.subheader("Style Guide and Suggestions:")
             # Expanders
             for items in data:
-                with st.expander(f"Line `{items['line']}` | Severity: `{items['severity']}`"):
+                with st.expander(
+                    f"Line `{items['line']}` | Severity: `{items['severity']}`"
+                ):
                     st.write(items["message"])
             # JSON output
             st.subheader("Raw API response : ")
