@@ -1,5 +1,4 @@
 import streamlit as st
-from typing_extensions import TypedDict
 
 
 class AnalyzerConfigs:
@@ -22,17 +21,8 @@ class AnalyzerConfigs:
         "Swift",
         "Rust",
     ]
-    genai_api_key: str = st.secrets["GENAI_API_KEY"]
+    genai_api_key: str = st.secrets("GENAI_API_KEY")
     style_guides: dict = {
         "google style": "https://google.github.io/styleguide/pyguide.html",
         "pep8": "https://pep8.org/",
     }
-
-
-class ResponseData(TypedDict):
-    """
-    For schema based responses like `JSON`
-    """
-
-    line: int
-    message: str

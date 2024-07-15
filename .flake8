@@ -1,8 +1,10 @@
 [flake8]
-ignore = E302, W292
+ignore = E302, W292, W391
 exclude =
     .git,
     __pycache__,
     venv
     examples
 max-line-length = 120
+per-file-ignores =
+    gemini_analyzer.py: E501
